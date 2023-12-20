@@ -1,8 +1,8 @@
-import 'dart:convert';
-
-import 'package:api1/model/user.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+
+import '../controller/UserController.dart';
+import '../model/user.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -12,13 +12,13 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<User> users = [];
+  late Future<List<User>> usersFuture;
 
   @override
   void initState() {
-    // Move the fetchUsers call to initState to fetch data when the widget is initialized
-    fetchUsers();
     super.initState();
+    // Move the fetchUsers call to initState to fetch data when the widget is initialized
+    usersFuture = UserController.fetchUsers();
   }
 
   @override
@@ -27,51 +27,50 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Center(child: const Text('Random API call')),
       ),
-      body: ListView.builder(
-        itemBuilder: (context, index) {
-          final user = users[index];
-          return ListTile(
-            leading: ClipRRect(
-                borderRadius: BorderRadius.circular(100),
-                child: Image.network(user.url)),
-            title: Text(
-              user.id.toString(),
-              style: TextStyle(fontSize: 20, color: Colors.red),
-            ),
-            subtitle: Text(
-              user.url.toString(),
-            ),
-          );
+      body: FutureBuilder<List<User>>(
+        future: usersFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Text('No data available');
+          } else {
+            List<User> users = snapshot.data!;
+            return ListView.builder(
+              itemBuilder: (context, index) {
+                final user = users[index];
+                return ListTile(
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: Image.network(user.picture.large.toString()),
+                  ),
+                  title: Text(
+                    user.location.coordinates.fullLocation.toString(),
+                    style: TextStyle(fontSize: 20, color: Colors.red),
+                  ),
+                  subtitle: Text(
+                    user.gender.toString(),
+                  ),
+                );
+              },
+              itemCount: users.length,
+            );
+          }
         },
-        itemCount: users.length,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: fetchUsers,
+        onPressed: () {
+          setState(() {
+            usersFuture = UserController.fetchUsers();
+          });
+        },
         child: const Icon(
           Icons.play_arrow,
           size: 35,
         ),
       ),
     );
-  }
-
-  Future<List<User>> fetchUsers() async {
-    print("fetchUsers called");
-    const url = 'https://jsonplaceholder.typicode.com/photos';
-    final response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      List<dynamic> jsonResults = jsonDecode(response.body);
-
-      setState(() {
-        users = jsonResults.map((e) => User.fromJson(e)).toList();
-      });
-
-      print('fetchUsers Complete');
-      return users;
-    } else {
-      print('Failed to fetch users: ${response.statusCode}');
-      return users;
-    }
   }
 }

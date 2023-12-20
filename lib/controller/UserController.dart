@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:convert' show jsonDecode;
 
 import '../model/user.dart';
 import 'package:http/http.dart' as http;
@@ -13,7 +13,7 @@ class UserController {
 
     if (response.statusCode == 200) {
       List<dynamic> jsonResults = jsonDecode(response.body)['results'];
-      print(jsonResults);
+      // print(jsonResults);
       users = jsonResults.map((e) => User.fromJson(e)).toList();
 
       print('fetchUsers Complete');

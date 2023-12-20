@@ -31,29 +31,28 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      gender: json['gender'] as String,
-      name: Name.fromJson(json['name'] as Map<String, dynamic>),
-      location: Location.fromJson(json['location'] as Map<String, dynamic>),
-      email: json['email'] as String,
-      login: Login.fromJson(json['login'] as Map<String, dynamic>),
-      dob: Dob.fromJson(json['dob'] as Map<String, dynamic>),
-      registered:
-          Registered.fromJson(json['registered'] as Map<String, dynamic>),
-      phone: json['phone'] as String,
-      cell: json['cell'] as String,
-      id: Id.fromJson(json['id'] as Map<String, dynamic>),
-      picture: Picture.fromJson(json['picture'] as Map<String, dynamic>),
-      nat: json['nat'] as String,
+      gender: json['gender'],
+      name: Name.fromJson(json['name']),
+      location: Location.fromJson(json['location']),
+      email: json['email'],
+      login: Login.fromJson(json['login']),
+      dob: Dob.fromJson(json['dob']),
+      registered: Registered.fromJson(json['registered']),
+      phone: json['phone'],
+      cell: json['cell'],
+      id: Id.fromJson(json['id']),
+      picture: Picture.fromJson(json['picture']),
+      nat: json['nat'],
     );
   }
 
-  String get fullLocation {
-    return '${location.coordinates.latitude} ${location.coordinates.longitude}';
+  String get fullDob {
+    return '${dob.date}, ${dob.age}';
   }
 
-  String get fullName {
-    return '${name.first} ${name.title} ${name.last}';
-  }
+  // String get fullName {
+  //   return '${name.first} ${name.title} ${name.last}';
+  // }
 }
 
 class Location {
@@ -77,13 +76,13 @@ class Location {
 
   factory Location.fromJson(Map<String, dynamic> json) {
     return Location(
-      street: Street.fromJson(json['street'] as Map<String, dynamic>),
-      city: json['city'] as String,
-      state: json['state'] as String,
-      country: json['country'] as String,
+      street: Street.fromJson(json['street']),
+      city: json['city'],
+      state: json['state'],
+      country: json['country'],
       postcode: json['postcode'].toString(),
       coordinates: Coordinates.fromJson(json['coordinates']),
-      timezone: Timezone.fromJson(json['timezone'] as Map<String, dynamic>),
+      timezone: Timezone.fromJson(json['timezone']),
     );
   }
 
@@ -103,8 +102,8 @@ class Street {
 
   factory Street.fromJson(Map<String, dynamic> json) {
     return Street(
-      number: json['number'], // Use dynamic if it can be a string or int
-      name: json['name'] as String,
+      number: json['number'],
+      name: json['name'],
     );
   }
 }
@@ -124,6 +123,7 @@ class Coordinates {
       longitude: json['longitude'].toString(),
     );
   }
+
   String get fullLocation {
     return '$latitude, $longitude';
   }
@@ -140,8 +140,8 @@ class Timezone {
 
   factory Timezone.fromJson(Map<String, dynamic> json) {
     return Timezone(
-      offset: json['offset'] as String,
-      description: json['description'] as String,
+      offset: json['offset'],
+      description: json['description'],
     );
   }
 }
@@ -167,13 +167,13 @@ class Login {
 
   factory Login.fromJson(Map<String, dynamic> json) {
     return Login(
-      uuid: json['uuid'] as String,
-      username: json['username'] as String,
-      password: json['password'] as String,
-      salt: json['salt'] as String,
-      md5: json['md5'] as String,
-      sha1: json['sha1'] as String,
-      sha256: json['sha256'] as String,
+      uuid: json['uuid'],
+      username: json['username'],
+      password: json['password'],
+      salt: json['salt'],
+      md5: json['md5'],
+      sha1: json['sha1'],
+      sha256: json['sha256'],
     );
   }
 }
@@ -189,10 +189,14 @@ class Dob {
 
   factory Dob.fromJson(Map<String, dynamic> json) {
     return Dob(
-      date: json['date'] as String,
-      age: json['age'] as int,
+      date: json['date'],
+      age: json['age'],
     );
   }
+
+  // String get fullDob {
+  //   return '$date, $age';
+  // }
 }
 
 class Registered {
@@ -206,8 +210,8 @@ class Registered {
 
   factory Registered.fromJson(Map<String, dynamic> json) {
     return Registered(
-      date: json['date'] as String,
-      age: json['age'] as int,
+      date: json['date'],
+      age: json['age'],
     );
   }
 }
@@ -223,7 +227,7 @@ class Id {
 
   factory Id.fromJson(Map<String, dynamic> json) {
     return Id(
-      name: json['name'] as String,
+      name: json['name'],
       value: json['value'],
     );
   }
@@ -242,9 +246,9 @@ class Picture {
 
   factory Picture.fromJson(Map<String, dynamic> json) {
     return Picture(
-      large: json['large'] as String,
-      medium: json['medium'] as String,
-      thumbnail: json['thumbnail'] as String,
+      large: json['large'],
+      medium: json['medium'],
+      thumbnail: json['thumbnail'],
     );
   }
 }

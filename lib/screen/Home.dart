@@ -17,7 +17,6 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    // Move the fetchUsers call to initState to fetch data when the widget is initialized
     usersFuture = UserController.fetchUsers();
   }
 
@@ -51,7 +50,7 @@ class _HomeState extends State<Home> {
                     style: TextStyle(fontSize: 20, color: Colors.red),
                   ),
                   subtitle: Text(
-                    user.gender.toString(),
+                    user.name.fullName.toString(),
                   ),
                 );
               },

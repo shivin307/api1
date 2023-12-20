@@ -16,4 +16,7 @@ class Name {
       last: json['last'] as String,
     );
   }
+  String get fullName {
+    return '${first} ${title} ${last}';
+  }
 }
